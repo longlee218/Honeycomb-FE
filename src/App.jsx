@@ -17,15 +17,15 @@ import {
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { sendClientTransactions } from "@honeycomb-protocol/edge-client/client/walletHelpers";
 import { client } from "./constants";
-import {
-  clusterApiUrl,
-  Connection,
-  LAMPORTS_PER_SOL,
-  PublicKey,
-} from "@solana/web3.js";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+// import {
+  // clusterApiUrl,
+//   Connection,
+//   LAMPORTS_PER_SOL,
+//   PublicKey,
+// } from "@solana/web3.js";
+// import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 
-const network = WalletAdapterNetwork.Testnet;
+const network = "https://edge.test.honeycombprotocol.com";
 
 function WalletComponent() {
   const wallet = useWallet();
@@ -48,22 +48,24 @@ function WalletComponent() {
     }
   };
 
-  const handleAirdrop = async () => {
-    try {
-      const connection = new Connection(clusterApiUrl("testnet"));
-      const publicKey = new PublicKey(wallet.publicKey.toBase58());
+  // const handleAirdrop = async () => {
+  //   try {
+  //     const connection = new Connection("https://edge.test.honeycombprotocol.com", "confirmed");
+  //     const publicKey = new PublicKey(wallet.publicKey.toBase58());
 
-      const signature = await connection.requestAirdrop(
-        publicKey,
-        2 * LAMPORTS_PER_SOL // Amount of SOL to airdrop
-      );
+  //     const signature = await connection.requestAirdrop(
+  //       publicKey,
+  //       2 * LAMPORTS_PER_SOL // Amount of SOL to airdrop
+  //     );
 
-      await connection.confirmTransaction(signature);
-      setMessage(`Airdrop successful ${2} SOL! Tx Signature: ${signature}`);
-    } catch (error) {
-      setMessage(`Airdrop failed: ${error.message}`);
-    }
-  };
+  //     console.log("Transaction signature:", response);
+
+  //     // await connection.confirmTransaction(signature);
+  //     setMessage(`Airdrop successful ${2} SOL! Tx Signature: ${signature}`);
+  //   } catch (error) {
+  //     setMessage(`Airdrop failed: ${error.message}`);
+  //   }
+  // };
 
   return (
     <>
@@ -72,14 +74,14 @@ function WalletComponent() {
         <WalletMultiButton style={{ width: "100%" }} />
         <WalletDisconnectButton />
         <button onClick={handleSendTransaction}>Send transaction</button>
-        <button onClick={handleAirdrop}>Airdrop</button>
+        {/* <button onClick={handleAirdrop}>Airdrop</button> */}
       </div>
     </>
   );
 }
 
 function App() {
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const endpoint = useMemo(() => network, [network]);
   const wallets = useMemo(
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
     [network]
